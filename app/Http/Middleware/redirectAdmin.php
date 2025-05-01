@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Support\Facades\Auth;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class redirectAdmin
 {
     /**
      * Handle an incoming request.
@@ -15,16 +15,16 @@ class AdminMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next, $guard = null): Response
-    {
-        if (
-            Auth::guard($guard)->check() &&
-            Auth::user()->isAdmin == 1 &&
-            !in_array($request->route()->getName(), ['admin.dashboard', 'admin.logout'])
-        ) {
-            return redirect()->route('admin.dashboard');
-        }
-
-        return $next($request);
+{
+    if (
+        Auth::guard($guard)->check() &&
+        Auth::user()->isAdmin == 1 &&
+        $request->route()->getName() !== 'admin.dashboard'
+    ) {
+        return redirect()->route('admin.dashboard');
     }
+
+    return $next($request);
+}
 
 }
