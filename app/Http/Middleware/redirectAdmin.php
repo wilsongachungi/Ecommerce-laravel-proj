@@ -15,16 +15,16 @@ class redirectAdmin
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next, $guard = null): Response
-{
-    if (
-        Auth::guard($guard)->check() &&
-        Auth::user()->isAdmin == 1 &&
-        $request->route()->getName() !== 'admin.dashboard'
-    ) {
-        return redirect()->route('admin.dashboard');
-    }
+    {
+        if (
+            Auth::guard($guard)->check() &&
+            Auth::user()->isAdmin == 1 &&
+            $request->route()->getName() !== 'admin.dashboard'
+        ) {
+            return redirect()->route('admin.dashboard');
+        }
 
-    return $next($request);
-}
+        return $next($request);
+    }
 
 }
