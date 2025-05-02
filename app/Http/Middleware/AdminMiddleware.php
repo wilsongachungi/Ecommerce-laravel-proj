@@ -16,15 +16,12 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next, $guard = null): Response
     {
-        if (
-            Auth::guard($guard)->check() &&
-            Auth::user()->isAdmin == 1 &&
-            !in_array($request->route()->getName(), ['admin.dashboard', 'admin.logout'])
-        ) {
-            return redirect()->route('admin.dashboard');
+        if (!Auth::guard($guard)->check() || Auth::user()->isAdmin != 1) {
+            abort(403); // Or redirect to login/home
         }
 
         return $next($request);
     }
+
 
 }
