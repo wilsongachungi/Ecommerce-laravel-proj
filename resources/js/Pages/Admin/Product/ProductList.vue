@@ -332,13 +332,19 @@ const openEditModal = (product) => {
                                 <th scope="row"
                                     class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ product.title }}</th>
-                                <td class="px-4 py-3">{{ product.category_id }}</td>
-                                <td class="px-4 py-3">{{ product.brand_id }}</td>
+                                <td class="px-4 py-3">{{ product.category.name}}</td>
+                                <td class="px-4 py-3">{{ product.brand.name }}</td>
                                 <td class="px-4 py-3">{{ product.quantity }}</td>
-                                <td class="px-4 py-3">{{ product.price }}</td>
-
-                                <td class="px-4 py-3">{{ product.inStock }}</td>
-                                <td class="px-4 py-3">{{ product.published }}</td>
+                                <td class="px-4 py-3"> {{ product.price }}</td>
+                                <td class="px-4 py-3">
+                                    
+                                    <span v-if="product.inStock == 0" class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300"> inStock</span>
+                                    <span v-else class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-red-900 dark:text-red-300">out of Stock</span>
+                                    </td>
+                                <td class="px-4 py-3">
+                                    <button v-if="product.published == 0" type="button" class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-500 dark:focus:ring-green-800">Published</button>
+                                    <button v-else type="button" class="text-blue-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-500 dark:focus:ring-red-800">UnPublished</button>
+                                    </td>
                                 <td class="px-4 py-3 flex items-center justify-end">
                                     <button id="apple-imac-27-dropdown-button"
                                         data-dropdown-toggle="apple-imac-27-dropdown"
