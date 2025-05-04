@@ -22,12 +22,13 @@ createInertiaApp({
             import.meta.glob('./Pages/**/*.vue'),
         ),
     setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
+        const app = createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(ZiggyVue)
-            .use(ElementPlus)
-            .use(VueSweetalert2)
-            .mount(el)
+            app.use(ZiggyVue)
+            app.use(ElementPlus)
+            app.use(VueSweetalert2),
+            window.Swal = app.config.globalProperties. $swal;
+            app.mount(el)
 
     },
     progress: {
