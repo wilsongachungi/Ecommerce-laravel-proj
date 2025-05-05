@@ -91,6 +91,31 @@ const resetFormData = () => {
     dialogImageUrl.value = ''
 }
 
+//delete signal product iamage
+const deleteImage = async (pimage,index) =>{
+    try{
+        await router.delete('/admin/products/image/'+pimage.id,{
+            onSuccess:(page)=>{
+                product_images.value.splice(index,1);
+                Swal.fire({
+                    toast: true,
+                    icon: 'success',
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    title: page.props.flash.success
+            })
+            }
+        })
+    }catch(err){
+        console.log(err)
+    }
+}
+
+//update product method
+// const updateProduct = async ()=> {
+
+// }
+
 //open add modal
 const openAddModal = () => {
     isAddProduct.value = true
@@ -197,11 +222,17 @@ const openEditModal = (product) => {
                 </div>
 
                 <!-- list of images for selected product-->
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <div v-for="(pimage,index ) in product_images" :key="pimage.id" class="relative w-32 h-32 group">
+                        <!-- Product Image -->
+                        <img class="w-full h-full object-cover rounded-sm" :src="'/' + pimage.image" alt="">
 
-                <div v-for="pimage in product_images" :key="pimage.id" class="relative">
-                    <img class="w-10 h-10 rounded-sm" :src="'/' + pimage.image" alt="">
-                    <span
-                        class="absolute top-0 left-8 transform -translate-y-1/2 w-3.5 h-3.5 bg-red-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
+                        <!-- Close "×" span -->
+                        <span @click="deleteImage(pimage, index)"
+                            class="absolute top-1 right-1 bg-red-500 text-white text-sm font-bold w-6 h-6 flex items-center justify-center rounded-full cursor-pointer shadow hover:bg-red-600 transition">
+                            ×
+                        </span>
+                    </div>
                 </div>
 
 

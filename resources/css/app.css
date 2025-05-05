@@ -1,6 +1,11 @@
+@import "flowbite/src/themes/default";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "flowbite/src/themes/default";
+
 @plugin "flowbite/plugin";
+
+/* ⚠️ Remove this line if it's causing issues */
 @source "../node_modules/flowbite";
+
