@@ -152,6 +152,39 @@ const updateProduct = async ()=> {
     }
 }
 
+//delete product
+const deleteProduct = (product, index)=>{
+    Swal.fire({
+        title: 'Are you sure',
+        text: "This action cannot undo!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtoColor: '#d33',
+        cancelButtonText:'no',
+        confirmButtonText:'yes, Delete!'
+    }).then((result)=>{
+        if(result.isConfirmed) {
+            try{
+                router.delete('/admin/products/destroy/' + product.id, {
+                    onSuccess : (page)=>{
+                        this.delete(product, index);
+                        Swal.fire({
+                    toast: true,
+                    icon: 'success',
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    title: page.props.flash.success
+            });
+                    }
+                })
+            }catch(err){
+                console.log(err)
+            }
+        }
+    })
+}
+
 //open add modal
 const openAddModal = () => {
     isAddProduct.value = true
@@ -454,16 +487,12 @@ const openEditModal = (product) => {
                                         <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
                                             :aria-labelledby="`${product.id}-button`">
                                             <li>
-                                                <a href="#"
-                                                    class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Show</a>
-                                            </li>
-                                            <li>
                                                 <button @click="openEditModal(product)"
                                                     class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</button>
                                             </li>
                                         </ul>
                                         <div class="py-1">
-                                            <a href="#"
+                                            <a href="#" @click="deleteProduct(product, index)"
                                                 class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
                                         </div>
                                     </div>

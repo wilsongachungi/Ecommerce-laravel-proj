@@ -92,6 +92,13 @@ class ProductController extends Controller
     {
         $image = ProductImage::where('id',$id)->delete();
 
-        return redirect()->route('admin.product.index')->with('success', 'Product Deleted Successfully');
+        return redirect()->back()->with('success', 'Product Deleted Successfully');
+    }
+
+    public function destroy($id)
+    {
+        $image = Product::findOrFail($id)->delete();
+
+        return redirect()->back()->with('success', 'Product Deleted Successfully');
     }
 }
