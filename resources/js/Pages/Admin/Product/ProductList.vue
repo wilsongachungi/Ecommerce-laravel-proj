@@ -6,7 +6,12 @@ import { Plus } from '@element-plus/icons-vue';
 import 'flowbite';
 
 
-const products = usePage().props.products;
+
+
+defineProps({
+    products:Array
+})
+
 const brands = usePage().props.brands;
 const categories = usePage().props.categories;
 
@@ -69,6 +74,7 @@ const AddProduct = async () => {
                     position: 'top-end',
                     showConfirmButton: false,
                     title: page.props.flash.success
+                    
                 })
                 dialogVisible.value = false;
                 resetFormData();
@@ -112,9 +118,39 @@ const deleteImage = async (pimage,index) =>{
 }
 
 //update product method
-// const updateProduct = async ()=> {
+const updateProduct = async ()=> {
+    const formData = new FormData();
+    formData.append('title', title.value);
+    formData.append('price', price.value);
+    formData.append('quantity', quantity.value);
+    formData.append('description', description.value);
+    formData.append('brand_id', brand_id.value);
+    formData.append('category_id', category_id.value);
+    formData.append("_method",'PUT');
 
-// }
+    for (const image of productImages.value) {
+        formData.append('product_images[]', image.raw)
+    }
+
+    try {
+        await router.post('products/update/'+id.value, formData,{
+            onSuccess:(page)=>{
+                dialogVisible.value = false;
+                resetFormData();
+                Swal.fire({
+                    toast: true,
+                    icon: 'success',
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    title: page.props.flash.success
+            });
+
+            }
+        });
+    }catch(err){
+
+    }
+}
 
 //open add modal
 const openAddModal = () => {
@@ -149,7 +185,7 @@ const openEditModal = (product) => {
         <el-dialog v-model="dialogVisible" :title="editMode ? 'Edit Product' : 'Add Product'" width="500"
             :before-close="handleClose">
 
-            <form @submit.prevent="AddProduct()" class="max-w-md mx-auto">
+            <form @submit.prevent="editMode ? updateProduct() :AddProduct()" class="max-w-md mx-auto">
                 <div class="relative z-0 w-full mb-5 group">
                     <input v-model="title" type="text" name="floating_email" id="floating_title"
                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
