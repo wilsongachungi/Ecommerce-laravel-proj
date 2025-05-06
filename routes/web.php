@@ -4,6 +4,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
@@ -11,7 +12,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 
 // Public welcome page
 Route::get('/',[UserController::class,'index'])->name('user.home');
-   
+
 
 
 // Normal user dashboard
@@ -43,6 +44,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::put('/products/update/{id}',[ProductController::class, 'update'])->name('admin.product.image.update');
     Route::delete('/products/image/{id}',[ProductController::class, 'deleteImage'])->name('admin.product.image.delete');
     Route::delete('/products/destroy/{id}',[ProductController::class, 'destroy'])->name('admin.product.image.destroy');
+});
+
+Route::prefix()->controller(CartController::class)->group(function () {
+    Route::get('view','view')->name('cart.view');
+    Route::get('store/{product}','store')->name('cart.store');
+    Route::patch('update/{product}','update')->name('cart.update');
+    Route::delete('delete/{product}','delete')->name('cart.delete');
 });
 
 require __DIR__.'/auth.php';
