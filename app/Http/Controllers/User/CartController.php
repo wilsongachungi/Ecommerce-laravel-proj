@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Helper\Cart;
+use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\CartItem;
 use Illuminate\Http\Request;
@@ -10,7 +11,10 @@ use App\Http\Controllers\Controller;
 
 class CartController extends Controller
 {
-    public function view() {}
+    public function view() 
+    {
+        return Inertia::render('User/CartList');
+    }
 
     public function store(Request $request, Product $product)
 {

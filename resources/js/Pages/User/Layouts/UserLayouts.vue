@@ -17,10 +17,6 @@ onMounted(() => {
 <div>
     <Header></Header>
 
-  
-
-<!--hero section-->
-<Hero></Hero>
 
 <!--Main-->
 

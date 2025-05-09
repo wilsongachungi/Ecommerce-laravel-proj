@@ -4,6 +4,8 @@ import Swal from 'sweetalert2'
 import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
 import UserLayouts from './Layouts/UserLayouts.vue';
+import Hero from './Layouts/Hero.vue';
+
 
 // initialize components based on data attribute selectors
 onMounted(() => {
@@ -40,6 +42,8 @@ const addToCart = (product) => {
 
 <template>
     <UserLayouts>
+        <!--hero section-->
+        <Hero></Hero>
 
         <div class="bg-white">
             <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">

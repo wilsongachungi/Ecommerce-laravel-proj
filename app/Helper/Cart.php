@@ -12,7 +12,7 @@ class Cart {
         if($user = auth()->user()){
             return CartItem::whereUserId($user->id)->sum('quantity');
         }else{
-            array_reduce(self::getCookieCartItems(), fn($carry, $item) => $carry + $item['quantity'], 0);
+          return array_reduce(self::getCookieCartItems(), fn($carry, $item) => $carry + $item['quantity'], 0);
         }
     }
 
