@@ -11,6 +11,8 @@ class Cart {
     public static function getCount() {
         if($user = auth()->user()){
             return CartItem::whereUserId($user->id)->sum('quantity');
+        }else{
+            array_reduce(self::getCookieCartItems(), fn($carry, $item) => $carry + $item['quantity'], 0);
         }
     }
 
@@ -22,22 +24,23 @@ class Cart {
                 ->map(fn (CartItem $item) => [
                     'product_id' => $item->product_id,
                     'quantity' => $item->quantity
-                ])
-                ->toArray(); // Ensure it always returns an array
+                ]);
+
+        }else{
+            return self::getCookieCartItems();
         }
 
-        return []; // Return empty array if user is not authenticated
     }
 
 
     public static function getCookieCartItems()
     {
-        return json_decode(request()->cookie('cart_items','[]', true));
+        return json_decode(request()->cookie('cart_items','[]'), true);
     }
 
-    public static function setCookieCartItems()
+    public static function setCookieCartItems(array $cartItems)
     {
-        Cookie::queue('cart_items', fn(int $carry, array $item)=> $carry + $item['quantity'],0);
+        Cookie::queue('cart_items',json_encode($cartItems), 60*24*30);
     }
 
     public static function saveCookieCartItems()
@@ -77,7 +80,7 @@ class Cart {
             ])->first();
 
             if(!$existingCatItem) {
-                //only insert if it does not exist
+
                 $newCartItems[] = [
                    'user_id' => $request->user()->id,
                 'product_id' => $cartItem['product_id'],

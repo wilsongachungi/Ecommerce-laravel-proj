@@ -43,8 +43,8 @@ class CartController extends Controller
 
         // Loop by reference to update existing product quantity
         foreach ($cartItems as &$item) {
-            if ($item->product_id == $product->id) {
-                $item->quantity += $quantity;
+            if ($item['product_id'] === $product->id) {
+                $item['quantity'] += $quantity;
                 $isProductExists = true;
                 break;
             }

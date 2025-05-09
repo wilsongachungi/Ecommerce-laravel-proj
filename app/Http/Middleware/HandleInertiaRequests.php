@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Helper\Cart;
 use Inertia\Middleware;
+use Tighten\Ziggy\Ziggy;
 use Illuminate\Http\Request;
 use App\Http\Resources\CartResource;
 use Illuminate\Foundation\Application;
@@ -37,19 +38,27 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'cart' => new CartResource(Cart::getProductsAndCartItems()),
 
-            'flash'=>[
-                'success'=>fn () => $request->session()->get('success'),
-                'error'=>fn () => $request->session()->get('success'),
-                'worning'=>fn () => $request->session()->get('worning'),
-                'info'=>fn () => $request->session()->get('info'),
+
+            'ziggy' => fn() => [
+                (new Ziggy)->toArray(),
+                'location' => request()->url(), 
             ],
 
-                'canLogin' => app('router')->has('login'),
-                'canRegister' => app('router')->has('register'),
-                'laravelVersion' => Application::VERSION,
-                'phpVersion' => PHP_VERSION,
+
+            'cart' => new CartResource(Cart::getProductsAndCartItems()),
+
+            'flash' => [
+                'success' => fn() => $request->session()->get('success'),
+                'error' => fn() => $request->session()->get('success'),
+                'worning' => fn() => $request->session()->get('worning'),
+                'info' => fn() => $request->session()->get('info'),
+            ],
+
+            'canLogin' => app('router')->has('login'),
+            'canRegister' => app('router')->has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
 
         ];
     }

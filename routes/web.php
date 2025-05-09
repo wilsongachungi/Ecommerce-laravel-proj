@@ -46,9 +46,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::delete('/products/destroy/{id}',[ProductController::class, 'destroy'])->name('admin.product.image.destroy');
 });
 
-Route::prefix()->controller(CartController::class)->group(function () {
+Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::get('view','view')->name('cart.view');
-    Route::get('store/{product}','store')->name('cart.store');
+    Route::post('store/{product}','store')->name('cart.store');
     Route::patch('update/{product}','update')->name('cart.update');
     Route::delete('delete/{product}','delete')->name('cart.delete');
 });
