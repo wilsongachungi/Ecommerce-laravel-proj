@@ -13,6 +13,9 @@ const update = (product,quantity) => router.patch(route('cart.update', product),
     quantity
 })
 
+//remove from the cart
+const remove = (product) => router.delete(route('cart.delete',product))
+
 
 </script>
 
@@ -92,8 +95,8 @@ const update = (product,quantity) => router.patch(route('cart.update', product),
                                     {{ product.price }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <a href="#"
-                                        class="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</a>
+                                    <a @click="remove(product)"
+                                        class="font-medium text-red-600 dark:text-red-500 hover:underline cursor-pointer">Remove</a>
                                 </td>
                             </tr>
 
@@ -104,7 +107,7 @@ const update = (product,quantity) => router.patch(route('cart.update', product),
                 </div>
                 <div class="lg:w-1/3 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
                     <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Summary</h2>
-                    <p class="leading-relaxed mb-5 text-gray-600">Total:ksh 1234</p>
+                    <p class="leading-relaxed mb-5 text-gray-600">Total:ksh {{total}}</p>
                     <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Shipping Address</h2>
                     <p class="leading-relaxed mb-5 text-gray-600">1234, Nairobi</p>
                     <p class="leading-relaxed mb-5 text-gray-600">Or you can add one below</p>

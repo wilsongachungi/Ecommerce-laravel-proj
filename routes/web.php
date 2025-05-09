@@ -9,6 +9,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\User\ProductListController;
 
 // Public welcome page
 Route::get('/',[UserController::class,'index'])->name('user.home');
@@ -52,5 +53,12 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::patch('update/{product}','update')->name('cart.update');
     Route::delete('delete/{product}','delete')->name('cart.delete');
 });
+
+ //list for product route and filter
+ Route::prefix('products')->controller(ProductListController::class)->group(function(){
+    Route::get('/','index')->name('product.index');
+ });
+
+ 
 
 require __DIR__.'/auth.php';
