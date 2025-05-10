@@ -67,7 +67,7 @@ class Product extends Model
             ->when(request('prices'), function (Builder $q) {
                 $q->whereBetween('price', [
                     request('prices.from', 0),
-                    request('prices.to', 1000000) // Set a reasonable upper bound default
+                    request('prices.to', 100000) 
                 ]);
             });
     }

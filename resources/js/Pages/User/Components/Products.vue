@@ -1,7 +1,28 @@
 <script setup>
+import { Link, router } from '@inertiajs/vue3'
+
 defineProps({
     products: Array
 })
+
+//add to cart function
+const addToCart = (product) => {
+    console.log(product);
+    router.post(route('cart.store', product), {
+        onSuccess: (page) => {
+            if (page.props.flash.success) {
+                Swal.fire({
+                    toast: true,
+                    icon: "success",
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    title: page.props.flash.success
+                });
+            }
+        }
+    });
+};
 </script>
 <template>
    <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
