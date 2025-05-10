@@ -8,6 +8,7 @@ use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\User\CheckoutController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\User\ProductListController;
 
@@ -26,6 +27,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //checkout
+    Route::prefix('checkout')->controller(CheckoutController::class)->group(function() {
+        Route::post('order','store')->name('checkout.store');
+    });
 });
 
 // Admin guest routes (login form, login submit, logout)
@@ -59,6 +65,6 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::get('/','index')->name('product.index');
  });
 
- 
+
 
 require __DIR__.'/auth.php';

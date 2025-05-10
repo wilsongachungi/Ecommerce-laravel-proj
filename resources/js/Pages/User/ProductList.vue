@@ -1,7 +1,7 @@
 <script setup>
 import UserLayouts from './Layouts/UserLayouts.vue';
 import Products from './Components/Products.vue';
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { useForm } from '@inertiajs/vue3';
@@ -23,13 +23,7 @@ import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/vue/20/solid'
 
 
-const sortOptions = [
-    { name: 'Most Popular', href: '#', current: true },
-    { name: 'Best Rating', href: '#', current: false },
-    { name: 'Newest', href: '#', current: false },
-    { name: 'Price: Low to High', href: '#', current: false },
-    { name: 'Price: High to Low', href: '#', current: false },
-]
+
 const subCategories = [
     { name: 'Totes', href: '#' },
     { name: 'Backpacks', href: '#' },
@@ -37,48 +31,13 @@ const subCategories = [
     { name: 'Hip Bags', href: '#' },
     { name: 'Laptop Sleeves', href: '#' },
 ]
-const filters = [
-    {
-        id: 'color',
-        name: 'Color',
-        options: [
-            { value: 'white', label: 'White', checked: false },
-            { value: 'beige', label: 'Beige', checked: false },
-            { value: 'blue', label: 'Blue', checked: true },
-            { value: 'brown', label: 'Brown', checked: false },
-            { value: 'green', label: 'Green', checked: false },
-            { value: 'purple', label: 'Purple', checked: false },
-        ],
-    },
-    {
-        id: 'category',
-        name: 'Category',
-        options: [
-            { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-            { value: 'sale', label: 'Sale', checked: false },
-            { value: 'travel', label: 'Travel', checked: true },
-            { value: 'organization', label: 'Organization', checked: false },
-            { value: 'accessories', label: 'Accessories', checked: false },
-        ],
-    },
-    {
-        id: 'size',
-        name: 'Size',
-        options: [
-            { value: '2l', label: '2L', checked: false },
-            { value: '6l', label: '6L', checked: false },
-            { value: '12l', label: '12L', checked: false },
-            { value: '18l', label: '18L', checked: false },
-            { value: '20l', label: '20L', checked: false },
-            { value: '40l', label: '40L', checked: true },
-        ],
-    },
-]
 
 const mobileFiltersOpen = ref(false)
 
 const props = defineProps({
-    products: Array
+    products: Array,
+    categories: Array,
+    brands: Array
 });
 
 const filterPrices = useForm({
@@ -97,7 +56,32 @@ const priceFilter = () => {
         preserveState: true,
         replace: true
     })
+}
 
+//filter brands and categories
+const selectedBrands = ref([])
+const selectedCategories = ref([])
+
+watch(selectedBrands, () => {
+    //update the filtered product whenever selected brands change
+    updateFilteredProducts()
+
+})
+
+watch(selectedCategories, () => {
+    //update the filtered product whenever selected brands change
+    updateFilteredProducts()
+
+})
+
+function updateFilteredProducts() {
+    router.get('products',{
+        brands: selectedBrands.value,
+        categories: selectedCategories.value
+    },{
+        preserveState: true,
+        replace: true
+    })
 }
 
 </script>
@@ -276,19 +260,19 @@ const priceFilter = () => {
 
                                     <!-- Button -->
                                     <div class="flex cursor-pointer">
-                                        <secondaryButtonVue :disabled="filters.processing" @click="priceFilter()">
+                                        <secondaryButtonVue  @click="priceFilter()">
                                             OK
                                         </secondaryButtonVue>
                                     </div>
                                 </div>
 
 
-                                <Disclosure as="div" v-for="section in filters" :key="section.id"
+                                <Disclosure as="div"
                                     class="border-b border-gray-200 py-6" v-slot="{ open }">
                                     <h3 class="-my-3 flow-root">
                                         <DisclosureButton
                                             class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                                            <span class="font-medium text-gray-900">{{ section.name }}</span>
+                                            <span class="font-medium text-gray-900">Brands</span>
                                             <span class="ml-6 flex items-center">
                                                 <PlusIcon v-if="!open" class="size-5" aria-hidden="true" />
                                                 <MinusIcon v-else class="size-5" aria-hidden="true" />
@@ -297,13 +281,13 @@ const priceFilter = () => {
                                     </h3>
                                     <DisclosurePanel class="pt-6">
                                         <div class="space-y-4">
-                                            <div v-for="(option, optionIdx) in section.options" :key="option.value"
+                                            <div v-for="brand in brands" :key="brand.id"
                                                 class="flex gap-3">
                                                 <div class="flex h-5 shrink-0 items-center">
                                                     <div class="group grid size-4 grid-cols-1">
-                                                        <input :id="`filter-${section.id}-${optionIdx}`"
-                                                            :name="`${section.id}[]`" :value="option.value"
-                                                            type="checkbox" :checked="option.checked"
+                                                        <input :id="`filter-${brand.id}`"
+                                                             :value="brand.id"
+                                                            type="checkbox"  v-model="selectedbrands"
                                                             class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto" />
                                                         <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
                                                             viewBox="0 0 14 14" fill="none">
@@ -316,8 +300,48 @@ const priceFilter = () => {
                                                         </svg>
                                                     </div>
                                                 </div>
-                                                <label :for="`filter-${section.id}-${optionIdx}`"
-                                                    class="text-sm text-gray-600">{{ option.label }}</label>
+                                                <label :for="`filter-${brand.id}`"
+                                                    class="text-sm text-gray-600">{{ brand.name }}</label>
+                                            </div>
+                                        </div>
+                                    </DisclosurePanel>
+                                </Disclosure>
+
+                                <Disclosure as="div"
+                                    class="border-b border-gray-200 py-6" v-slot="{ open }">
+                                    <h3 class="-my-3 flow-root">
+                                        <DisclosureButton
+                                            class="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                            <span class="font-medium text-gray-900">Categories</span>
+                                            <span class="ml-6 flex items-center">
+                                                <PlusIcon v-if="!open" class="size-5" aria-hidden="true" />
+                                                <MinusIcon v-else class="size-5" aria-hidden="true" />
+                                            </span>
+                                        </DisclosureButton>
+                                    </h3>
+                                    <DisclosurePanel class="pt-6">
+                                        <div class="space-y-4">
+                                            <div v-for="category in categories" :key="category.id"
+                                                class="flex gap-3">
+                                                <div class="flex h-5 shrink-0 items-center">
+                                                    <div class="group grid size-4 grid-cols-1">
+                                                        <input :id="`filter-${category.id}`"
+                                                             :value="category.id"
+                                                            type="checkbox" v-model="selectedCategories"
+                                                            class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto" />
+                                                        <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
+                                                            viewBox="0 0 14 14" fill="none">
+                                                            <path class="opacity-0 group-has-checked:opacity-100"
+                                                                d="M3 8L6 11L11 3.5" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path class="opacity-0 group-has-indeterminate:opacity-100"
+                                                                d="M3 7H11" stroke-width="2" stroke-linecap="round"
+                                                                stroke-linejoin="round" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                <label :for="`filter-${category.id}`"
+                                                    class="text-sm text-gray-600">{{ category.name }}</label>
                                             </div>
                                         </div>
                                     </DisclosurePanel>

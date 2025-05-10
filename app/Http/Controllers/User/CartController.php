@@ -24,7 +24,7 @@ class CartController extends Controller
 
             if ($cartItems->count() > 0) {
                 return Inertia::render('User/CartList', [
-                    'cart' => new CartResource(Cart::getProductsAndCartItems()),
+                    'cartItems' => new CartResource(Cart::getProductsAndCartItems()),
                     'userAddress' => $userAddress,
                 ]);
             }

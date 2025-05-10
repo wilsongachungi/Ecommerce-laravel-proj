@@ -1,6 +1,6 @@
 <script setup>
 import UserLayouts from './Layouts/UserLayouts.vue';
-import { computed } from 'vue';
+import { computed, reactive } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3';
 
@@ -9,6 +9,15 @@ const products = computed(() => usePage().props.cart.data.products);
 const total = computed(() => usePage().props.cart.data.total);
 const itemId = (id) => carts.value.findIndex((item) => item.product_id === id);
 
+const form = reactive({
+    address1: null,
+    state: null,
+    city:null,
+    zipcode:null,
+    city_code:null,
+    type: null
+})
+
 const update = (product,quantity) => router.patch(route('cart.update', product), {
     quantity
 })
@@ -16,7 +25,21 @@ const update = (product,quantity) => router.patch(route('cart.update', product),
 //remove from the cart
 const remove = (product) => router.delete(route('cart.delete',product))
 
+defineProps({
+    userAddress: Object
+})
 
+function submit(){
+    router.visit(route('checkout.store'),{
+        method: 'post',
+        data:{
+            carts:usePage().props.cart.data.items,
+            products:usePage().props.cart.data.products,
+            total:usePage().props.cart.data.total,
+            address:form
+        }
+    })
+}
 </script>
 
 <template>
@@ -108,27 +131,56 @@ const remove = (product) => router.delete(route('cart.delete',product))
                 <div class="lg:w-1/3 md:w-1/2 bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
                     <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Summary</h2>
                     <p class="leading-relaxed mb-5 text-gray-600">Total:ksh {{total}}</p>
-                    <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Shipping Address</h2>
-                    <p class="leading-relaxed mb-5 text-gray-600">1234, Nairobi</p>
-                    <p class="leading-relaxed mb-5 text-gray-600">Or you can add one below</p>
-                    <div class="relative mb-4">
-                        <label for="name" class="leading-7 text-sm text-gray-600">Name</label>
-                        <input type="text" id="name" name="name"
+
+                    <div v-if="userAddress">
+                        <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Shipping Address</h2>
+                    <p class="leading-relaxed mb-5 text-gray-600">{{userAddress.address1}},{{userAddress.city}},{{userAddress.zipcode}}</p>
+
+                    </div>
+
+                    <div v-else>
+                        <p class="leading-relaxed mb-5 text-gray-600">Add shipping address to continue</p>
+                    </div>
+
+
+                    <form @submit.prevent="submit" action="">
+                        <div class="relative mb-4">
+                        <label for="address1" class="leading-7 text-sm text-gray-600">Address 1</label>
+                        <input type="text" id="city" name="address1" v-model="form.address1"
                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                     </div>
                     <div class="relative mb-4">
-                        <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
-                        <input type="email" id="email" name="email"
+                        <label for="name" class="leading-7 text-sm text-gray-600">City</label>
+                        <input type="text" id="city" name="city" v-model="form.city"
                             class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                     </div>
                     <div class="relative mb-4">
-                        <label for="message" class="leading-7 text-sm text-gray-600">Message</label>
-                        <textarea id="message" name="message"
-                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
+                        <label for="name" class="leading-7 text-sm text-gray-600">State</label>
+                        <input type="text" id="state" name="state" v-model="form.state"
+                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                     </div>
-                    <button
+                    <div class="relative mb-4">
+                        <label for="zipCode" class="leading-7 text-sm text-gray-600">Zip Code</label>
+                        <input type="text" id="name" name="zipcode" v-model="form.zipcode"
+                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="countryCode" class="leading-7 text-sm text-gray-600">Country Code</label>
+                        <input type="text" id="countryCode" name="countrycode" v-model="form.country_code"
+                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                    </div>
+                    <div class="relative mb-4">
+                        <label for="type" class="leading-7 text-sm text-gray-600">Address type</label>
+                        <input type="type" id="type" name="type" v-model="form.type"
+                            class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                    </div>
+                    <button v-if="userAddress" type="submit"
                         class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Checkout</button>
-                    <p class="text-xs text-gray-500 mt-3">Continue Shopping.</p>
+
+                    <button v-else type="submit"
+                        class="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Add Addredss to continue</button>
+
+                    </form>
                 </div>
             </div>
         </section>
