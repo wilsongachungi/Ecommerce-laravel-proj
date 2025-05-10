@@ -93,7 +93,10 @@ const priceFilter = () => {
         from:filterPrices.prices[0],
         to:filterPrices.prices[1]
     }
-    })).get('products')
+    })).get('products',{
+        preserveState: true,
+        replace: true
+    })
 
 }
 
