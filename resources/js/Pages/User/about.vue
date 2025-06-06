@@ -30,7 +30,7 @@ import UserLayouts from './Layouts/UserLayouts.vue';
 
                 <!-- Image -->
                 <div class="flex justify-center">
-                    <img src="https://pagedone.io/asset/uploads/1717751272.png" alt="About TechSphere Shop"
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS98Jb552eagViMuLjYtn8P16IhPNdLQIm52Q&s" alt="About TechSphere Shop"
                         class="rounded-3xl max-w-md w-full shadow-lg">
                 </div>
 

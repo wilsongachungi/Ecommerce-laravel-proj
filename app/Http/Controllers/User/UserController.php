@@ -33,4 +33,5 @@ class UserController extends Controller
     {
         return Inertia::render('User/services');
     }
+
 }
