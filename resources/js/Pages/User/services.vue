@@ -4,7 +4,7 @@ import UserLayouts from './Layouts/UserLayouts.vue';
 
 <template>
     <UserLayouts>
-        <section class="bg-white pb-12">
+        <section class="bg-white pb-12 mt-5">
             <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
                 <div class="container mx-auto px-6 p-6 bg-white">
 

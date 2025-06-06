@@ -29,6 +29,6 @@ class AdminAuthController extends Controller
 
         $request->session()->invalidate();
 
-        return redirect()->route('admin.login');
+        return redirect()->route('user.home');
     }
 }
