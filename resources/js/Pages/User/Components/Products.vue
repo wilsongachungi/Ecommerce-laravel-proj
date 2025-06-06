@@ -37,7 +37,7 @@ const addToCart = (product) => {
 
                         <div
                             class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer z-10">
-                            <div class="bg-blue-700 p-2 rounded-full cursor-pointer" @click="addToCart(product)">
+                            <div class="bg-indigo-500 p-2 rounded-full cursor-pointer" @click="addToCart(product)">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6 text-white">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993
@@ -62,7 +62,7 @@ const addToCart = (product) => {
                             </div>
                         </div>
 
-                        <div class="mt-4 flex justify-between bg-blue-600">
+                        <div class="mt-4 flex justify-between bg-indigo-600 text-white">
                             <div class="p-2">
                                 <h3 class="text-sm ">
                                     <span aria-hidden="true" class="absolute inset-0" />

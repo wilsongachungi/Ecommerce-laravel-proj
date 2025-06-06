@@ -17,11 +17,14 @@ use App\Http\Controllers\User\ProductListController;
 
 // Public welcome page
 Route::get('/', [UserController::class, 'index'])->name('user.home');
-
+Route::get('/about', [UserController::class, 'about'])->name('about');
+Route::get('/services', [UserController::class, 'services'])->name('services');
 
 
 // Normal user dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+
 
 // Normal user profile management
 Route::middleware('auth')->group(function () {
