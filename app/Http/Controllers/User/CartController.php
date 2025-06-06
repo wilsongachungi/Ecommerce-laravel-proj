@@ -40,7 +40,7 @@ class CartController extends Controller
             ]);
         }
 
-        return redirect()->route('home'); // fallback
+        return redirect()->route('user.home'); // fallback
     }
 
 
@@ -140,7 +140,7 @@ class CartController extends Controller
 
             // Check if the user has any more cart items
             if (CartItem::where('user_id', $user->id)->count() <= 0) {
-                return redirect()->route('home')->with('info', 'Your cart is empty!');
+                return redirect()->route('user.home')->with('info', 'Your cart is empty!');
             }
 
             return redirect()->back()->with('success', 'Item removed successfully');
@@ -149,7 +149,7 @@ class CartController extends Controller
             $cartItems = Cart::getCookieCartItems();
 
             foreach ($cartItems as $i => $item) {
-                if ($item->product_id === $product->id) {
+                if ($item['product_id'] === $product->id) {
                     array_splice($cartItems, $i, 1); // Remove item from cart
                     break;
                 }
@@ -158,7 +158,7 @@ class CartController extends Controller
             Cart::setCookieCartItems($cartItems);
 
             if (count($cartItems) <= 0) {
-                return redirect()->route('home')->with('info', 'Your cart is empty!');
+                return redirect()->route('user.home')->with('info', 'Your cart is empty!');
             }
 
             return redirect()->back()->with('success', 'Item removed successfully');

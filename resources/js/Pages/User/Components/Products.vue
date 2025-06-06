@@ -62,15 +62,15 @@ const addToCart = (product) => {
                             </div>
                         </div>
 
-                        <div class="mt-4 flex justify-between">
-                            <div>
-                                <h3 class="text-sm text-gray-700">
+                        <div class="mt-4 flex justify-between bg-blue-600">
+                            <div class="p-2">
+                                <h3 class="text-sm ">
                                     <span aria-hidden="true" class="absolute inset-0" />
                                     {{ product.title }}
                                 </h3>
-                                <p class="mt-1 text-sm text-gray-500">{{ product.brand.name }}</p>
+                                <p class="mt-1 text-sm ">{{ product.brand.name }}</p>
                             </div>
-                            <p class="text-sm font-medium text-gray-900">{{ product.price }}</p>
+                            <p class="text-sm font-medium p-2">{{ product.price }}</p>
                         </div>
                     </div>
                 </div>

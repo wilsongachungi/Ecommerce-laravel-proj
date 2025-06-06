@@ -9,7 +9,7 @@ import 'flowbite';
 
 
 defineProps({
-    products:Array
+  products: Object
 })
 
 const brands = usePage().props.brands;
@@ -74,7 +74,7 @@ const AddProduct = async () => {
                     position: 'top-end',
                     showConfirmButton: false,
                     title: page.props.flash.success
-                    
+
                 })
                 dialogVisible.value = false;
                 resetFormData();
@@ -168,7 +168,6 @@ const deleteProduct = (product, index)=>{
             try{
                 router.delete('/admin/products/destroy/' + product.id, {
                     onSuccess : (page)=>{
-                        this.delete(product, index);
                         Swal.fire({
                     toast: true,
                     icon: 'success',

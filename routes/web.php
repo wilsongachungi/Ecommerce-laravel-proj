@@ -7,20 +7,21 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\User\CheckoutController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\User\ProductListController;
 
 // Public welcome page
-Route::get('/',[UserController::class,'index'])->name('user.home');
+Route::get('/', [UserController::class, 'index'])->name('user.home');
 
 
 
 // Normal user dashboard
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // Normal user profile management
 Route::middleware('auth')->group(function () {
@@ -29,8 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //checkout
-    Route::prefix('checkout')->controller(CheckoutController::class)->group(function() {
-        Route::post('order','store')->name('checkout.store');
+    Route::prefix('checkout')->controller(CheckoutController::class)->group(function () {
+        Route::post('order', 'store')->name('checkout.store');
+        Route::get('success', 'success')->name('checkout.success');
+        Route::get('cancel', 'cancel')->name('checkout.cancel');
     });
 });
 
@@ -46,25 +49,38 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
     //products routes
-    Route::get('/products',[ProductController::class, 'index'])->name('admin.product.index');
-    Route::post('/products/store',[ProductController::class, 'store'])->name('admin.product.store');
-    Route::put('/products/update/{id}',[ProductController::class, 'update'])->name('admin.product.image.update');
-    Route::delete('/products/image/{id}',[ProductController::class, 'deleteImage'])->name('admin.product.image.delete');
-    Route::delete('/products/destroy/{id}',[ProductController::class, 'destroy'])->name('admin.product.image.destroy');
+    Route::get('/products', [ProductController::class, 'index'])->name('admin.product.index');
+    Route::post('/products/store', [ProductController::class, 'store'])->name('admin.product.store');
+    Route::put('/products/update/{id}', [ProductController::class, 'update'])->name('admin.product.image.update');
+    Route::delete('/products/image/{id}', [ProductController::class, 'deleteImage'])->name('admin.product.image.delete');
+    Route::delete('/products/destroy/{id}', [ProductController::class, 'destroy'])->name('admin.product.image.destroy');
+
+    //category
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::post('/categories/store', [CategoryController::class, 'store'])->name('categories.store');
+    Route::put('/categories/update/{id}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/destroy/{id}', [CategoryController::class, 'destroy'])->name('category.category');
+
+    //Brand
+    Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
+    Route::post('/brands/store', [BrandController::class, 'store'])->name('brands.store');
+    Route::put('/brands/update/{id}', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('/brands/destroy/{id}', [BrandController::class, 'destroy'])->name('brand.destroy');
+
 });
 
 Route::prefix('cart')->controller(CartController::class)->group(function () {
-    Route::get('view','view')->name('cart.view');
-    Route::post('store/{product}','store')->name('cart.store');
-    Route::patch('update/{product}','update')->name('cart.update');
-    Route::delete('delete/{product}','delete')->name('cart.delete');
+    Route::get('view', 'view')->name('cart.view');
+    Route::post('store/{product}', 'store')->name('cart.store');
+    Route::patch('update/{product}', 'update')->name('cart.update');
+    Route::delete('delete/{product}', 'delete')->name('cart.delete');
 });
 
- //list for product route and filter
- Route::prefix('products')->controller(ProductListController::class)->group(function(){
-    Route::get('/','index')->name('product.index');
- });
+//list for product route and filter
+Route::prefix('products')->controller(ProductListController::class)->group(function () {
+    Route::get('/', 'index')->name('product.index');
+});
 
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

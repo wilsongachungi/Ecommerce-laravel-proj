@@ -14,7 +14,7 @@ class Category extends Model
         use HasSlug;
         use HasFactory;
 
-        protected $filable = ['name','slug'];
+        protected $fillable = ['name','slug'];
 
         public function products()
     {
